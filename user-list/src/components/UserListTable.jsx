@@ -1,7 +1,15 @@
 import UserListItem from "./UserListItem";
+import { useState, useEffect } from "react";
+import * as userService from "../services/userService";
 
 const UserListTable = () => {
-    return (
+    const [users, setUsers] = useState([]);
+
+   useEffect(() => {
+        userService.getAll()
+        .then(result => setUsers(result));
+   }, []);
+    return ( 
         <div className="table-wrapper">        
             <table className="table">
                 <thead>
