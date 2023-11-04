@@ -5,12 +5,14 @@ import * as userService from "../services/userService";
 const UserListTable = () => {
     const [users, setUsers] = useState([]);
 
-   useEffect(() => {
+
+    useEffect(() => {
         userService.getAll()
-        .then(result => setUsers(result));
-   }, []);
-    return ( 
-        <div className="table-wrapper">        
+            .then(result => setUsers(result));
+    }, []);
+
+    return (
+        <div className="table-wrapper">
             <table className="table">
                 <thead>
                     <tr>
@@ -67,7 +69,12 @@ const UserListTable = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <UserListItem/>
+                {users.map(user=> (
+                    <UserListItem
+                    key={user._id}
+                        {...user}
+                    />
+                ))}
                 </tbody>
             </table>
         </div>
