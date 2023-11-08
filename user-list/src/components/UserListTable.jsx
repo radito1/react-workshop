@@ -10,7 +10,8 @@ const UserListTable = () => {
 
     useEffect(() => {
         userService.getAll()
-            .then(result => setUsers(result));
+            .then(result => setUsers(result))
+            .catch(err => console.log(err));
     }, []);
 
     const createUserClickHandler = () => {
@@ -21,9 +22,25 @@ const UserListTable = () => {
         setShowCreate(false);
     }
 
+    const onUserCreateHandler = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData);
+        
+        const result = await userService.create(data);
+        
+        setShowCreate(false);
+    }
+
     return (
         <div className="table-wrapper">
-            {showCreate && <CreateUserModal hideModal={hideCreateUserModal}/>}
+            {showCreate && (
+                <CreateUserModal
+                    hideModal={hideCreateUserModal}
+                    onUserCreate={onUserCreateHandler}
+                />
+            )}
 
             <table className="table">
                 <thead>
@@ -75,19 +92,19 @@ const UserListTable = () => {
                                 <path fill="currentColor"
                                     d="M374.6 310.6l-160 160C208.4 476.9 200.2 480 192 480s-16.38-3.125-22.62-9.375l-160-160c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 370.8V64c0-17.69 14.33-31.1 31.1-31.1S224 46.31 224 64v306.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0S387.1 298.1 374.6 310.6z">
                                 </path>
-                    
+
                             </svg>
                         </th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                {users.map(user=> (
-                    <UserListItem
-                    key={user._id}
-                        {...user}
-                    />
-                ))}
+                    {users.map(user => (
+                        <UserListItem
+                            key={user._id}
+                            {...user}
+                        />
+                    ))}
                 </tbody>
             </table>
 
