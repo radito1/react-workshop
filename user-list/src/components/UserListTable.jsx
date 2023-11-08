@@ -1,12 +1,18 @@
-import UserListItem from "./UserListItem";
-import CreateUserModal from "./CreateUserModal";
 import { useState, useEffect } from "react";
 import * as userService from "../services/userService";
+
+import UserListItem from "./UserListItem";
+import CreateUserModal from "./CreateUserModal";
+import UserInfoModal from "./UserInfoModal";
+import UserDeleteModal from "./DeleteUserModal";
+
 
 const UserListTable = () => {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [showDelete, setShowDelete] = useState(false);
 
 
     useEffect(() => {
@@ -34,8 +40,18 @@ const UserListTable = () => {
         setShowCreate(false);
     }
 
-    const userInfoClickHandler = (userId) => {
-        console.log(userId);
+    const userInfoClickHandler = async (userId) => {
+        setSelectedUser(userId);
+        setShowInfo(true);
+    }
+
+    const deleteUserClickHandler = (userId) => {
+        setSelectedUser(userId);
+        setShowDelete(true);
+    }
+
+    const deleteUserHandler = async () => {
+            console.log('Delete user')
     }
 
     return (
@@ -47,7 +63,20 @@ const UserListTable = () => {
                 />
             )}
 
-            {showInfo && <UserInfoModal onClose={() => setShowInfo(false)} />}
+            {showInfo &&
+                <UserInfoModal
+                    onClose={() => setShowInfo(false)}
+                    userId={selectedUser}
+                />
+            }
+
+            {showDelete &&
+                <UserDeleteModal
+                    onClose={() => setShowDelete(false)}
+                    onDelete={deleteUserHandler}
+                />
+
+            }
 
             <table className="table">
                 <thead>
@@ -117,6 +146,7 @@ const UserListTable = () => {
                             lastName={user.lastName}
                             phoneNumber={user.phoneNumber}
                             onInfoClick={userInfoClickHandler}
+                            onDeleteClick={deleteUserClickHandler}
                         />
                     ))}
                 </tbody>
