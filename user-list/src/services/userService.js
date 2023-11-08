@@ -8,7 +8,7 @@ export const getAll = async () => {
 
     return data;
 
-}
+};
 
 export const create = async (data) => {
     const body = {
@@ -20,21 +20,23 @@ export const create = async (data) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         address: {
-            country: data.streetNumber,
+            country: data.country,
             city: data.city,
             street: data.street,
-            streetNumber: data.streetNumber
+            streetNumber: data.streetNumber,
         }
-    }
+    };
 
-
-     const response = await fetch(baseUrl, {
+    const response = await fetch(baseUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(body)    
-     })
+        body: JSON.stringify(body),
+    })
 
-     const result = await response.json();
-}
+    const result = await response.json();
+
+    return result;
+};
+

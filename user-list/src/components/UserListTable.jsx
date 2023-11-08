@@ -6,6 +6,7 @@ import * as userService from "../services/userService";
 const UserListTable = () => {
     const [users, setUsers] = useState([]);
     const [showCreate, setShowCreate] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
 
 
     useEffect(() => {
@@ -25,12 +26,16 @@ const UserListTable = () => {
     const onUserCreateHandler = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData(e.currentTarget);
-        const data = Object.fromEntries(formData);
-        
-        const result = await userService.create(data);
-        
+        const data = Object.fromEntries(new FormData(e.currentTarget));
+        const newUser = await userService.create(data);
+
+        setUsers(state => [...state, newUser]);
+
         setShowCreate(false);
+    }
+
+    const userInfoClickHandler = (userId) => {
+        console.log(userId);
     }
 
     return (
@@ -38,9 +43,11 @@ const UserListTable = () => {
             {showCreate && (
                 <CreateUserModal
                     hideModal={hideCreateUserModal}
-                    onUserCreate={onUserCreateHandler}
+                    onCreate={onUserCreateHandler}
                 />
             )}
+
+            {showInfo && <UserInfoModal onClose={() => setShowInfo(false)} />}
 
             <table className="table">
                 <thead>
@@ -102,7 +109,14 @@ const UserListTable = () => {
                     {users.map(user => (
                         <UserListItem
                             key={user._id}
-                            {...user}
+                            userId={user._id}
+                            createdAt={user.createdAt}
+                            email={user.email}
+                            firstName={user.firstName}
+                            imageUrl={user.imageUrl}
+                            lastName={user.lastName}
+                            phoneNumber={user.phoneNumber}
+                            onInfoClick={userInfoClickHandler}
                         />
                     ))}
                 </tbody>
