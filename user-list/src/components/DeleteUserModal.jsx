@@ -27,7 +27,7 @@ const UserDeleteModal = ({
                         </div>
                     </div>
                 </div>
-            </div>onClick={onClose}
+            </div>
         </div>
     );
 }

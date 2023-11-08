@@ -51,7 +51,11 @@ const UserListTable = () => {
     }
 
     const deleteUserHandler = async () => {
-            console.log('Delete user')
+        const result = await userService.remove(selectedUser);
+
+        setUsers(state=> state.filter(user =>user._id !== selectedUser));
+
+        setShowDelete(false);
     }
 
     return (
@@ -75,7 +79,6 @@ const UserListTable = () => {
                     onClose={() => setShowDelete(false)}
                     onDelete={deleteUserHandler}
                 />
-
             }
 
             <table className="table">
